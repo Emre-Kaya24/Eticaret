@@ -21,12 +21,13 @@ namespace Eticaret.Core.Entities
         [Display(Name = "Aktif?")]
         public bool IsActive { get; set; }
 
-        [Display(Name = "Admin?")]  
+        [Display(Name = "Admin?")]
         public bool IsAdmin { get; set; }
         [Display(Name = "Kayıt Tarihi"), ScaffoldColumn(false)]
         public DateTime CreateDate { get; set; } = DateTime.Now;
         [ScaffoldColumn(false)]
-        public Guid UserGuid { get; set; } 
+        public Guid UserGuid { get; set; } = Guid.NewGuid();
+        public List<Address> Addresses { get; set; } = new List<Address>();
 
     }
 }

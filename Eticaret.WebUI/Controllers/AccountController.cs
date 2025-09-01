@@ -40,7 +40,7 @@ namespace Eticaret.WebUI.Controllers
                 Password = user.Password,
                 Phone = user.Phone,
                 Surname = user.Surname
-
+                    
             };
             return View(model);
         }
@@ -132,21 +132,42 @@ namespace Eticaret.WebUI.Controllers
             }
             return View();
         }
+        
         public IActionResult SignUp()
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> SignUpAsync(AppUser appUser)
-        {   
+        {
             appUser.IsAdmin = false;
-            appUser.IsActive = true; 
+            appUser.IsActive = true;
+            appUser.UserGuid = Guid.NewGuid(); // UserGuid eklenmeli
+            appUser.CreateDate = DateTime.Now; // opsiyonel, default zaten atanıyor
+
             if (ModelState.IsValid)
             {
                 await _service.AddAsync(appUser);
                 await _service.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                // Otomatik login
+                var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, appUser.Name),
+            new Claim(ClaimTypes.Role, "Customer"),
+            new Claim(ClaimTypes.Email, appUser.Email),
+            new Claim("UserId", appUser.Id.ToString()),
+            new Claim("UserGuid", appUser.UserGuid.ToString())
+        };
+
+                var identity = new ClaimsIdentity(claims, "Login");
+                var principal = new ClaimsPrincipal(identity);
+                await HttpContext.SignInAsync(principal);
+
+                return RedirectToAction("Index");
             }
+
             return View(appUser);
         }
 

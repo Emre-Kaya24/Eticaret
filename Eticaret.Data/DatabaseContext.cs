@@ -7,6 +7,7 @@ namespace Eticaret.Data
 {
     public class DatabaseContext : DbContext
     {
+        public DbSet<Address> Addresses { get; set; }
         public DbSet<AppUser> AppUser { get; set; }
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Category> Categories { get; set; }
