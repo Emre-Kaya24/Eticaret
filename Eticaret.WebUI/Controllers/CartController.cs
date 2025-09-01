@@ -64,6 +64,17 @@ namespace Eticaret.WebUI.Controllers
 
             return RedirectToAction("Index");
         }
+        public IActionResult Checkout()
+        {
+            var cart = GetCart();
+            var model = new CheckoutViewModel()
+            {
+                CartProducts = cart.CartLines,
+                TotalPrice = cart.TotalPrice()
+            };
+            return View(model);
+        }
+
 
         private CartService GetCart()
         {
