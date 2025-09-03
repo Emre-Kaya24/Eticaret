@@ -5,16 +5,21 @@ using Eticaret.WebUI.ExtensionMethods;
 using Eticaret.WebUI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace Eticaret.WebUI.Controllers
 {
     public class CartController : Controller
     {
         private readonly IService<Product> _serviceProduct;
+        private readonly IService<Address> _serviceAddress;
+        private readonly IService<AppUser> _serviceAppUser;
 
-        public CartController(IService<Product> serviceProduct)
+        public CartController(IService<Product> serviceProduct, IService<Address> serviceAddress, IService<AppUser> serviceAppUser)
         {
             _serviceProduct = serviceProduct;
+            _serviceAddress = serviceAddress;
+            _serviceAppUser = serviceAppUser;
         }
 
         public IActionResult Index()
@@ -66,13 +71,20 @@ namespace Eticaret.WebUI.Controllers
             return RedirectToAction("Index");
         }
         [Authorize]
-        public IActionResult Checkout()
+        public async Task<IActionResult> Checkout()
         {
             var cart = GetCart();
+            var appuser = await _serviceAppUser.GetAsync(x => x.UserGuid.ToString() == HttpContext.User.FindFirst("UserGuid").Value);
+            if (appuser == null) 
+            {
+                return RedirectToAction("Index", "Account");
+            }
+            var addresses = await _serviceAddress.GetAllAsync(a => a.AppUserId == appuser.Id && a.IsActive);
             var model = new CheckoutViewModel()
             {
                 CartProducts = cart.CartLines,
-                TotalPrice = cart.TotalPrice()
+                TotalPrice = cart.TotalPrice(),
+                Addresses = addresses
             };
             return View(model);
         }
