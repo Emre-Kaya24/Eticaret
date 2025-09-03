@@ -29,9 +29,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.IsDeliveryAddress)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AppUser)
-            </th>
+            
             <th></th>
         </tr>
     </thead>
@@ -57,12 +55,9 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.IsDeliveryAddress)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AppUser.Email)
-                </td>
+               
                 <td>
                     <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@item.Id"><i class="fa-solid fa-pen"></i> Düzenle</a>
-                    <a class="btn btn-sm btn-info" asp-action="Details" asp-route-id="@item.Id"><i class="fa-solid fa-magnifying-glass"></i> Detay</a>
                     <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.Id"><i class="fa-solid fa-trash"></i> Sil</a>
                 </td>
             </tr>

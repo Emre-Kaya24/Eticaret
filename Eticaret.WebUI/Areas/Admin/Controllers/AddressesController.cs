@@ -56,7 +56,7 @@ namespace Eticaret.WebUI.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,City,District,OpenAddress,IsActive,IsBillingAddress,IsDeliveryAddress,AppUserId")] Address address)
+        public async Task<IActionResult> Create(Address address)
         {
             if (ModelState.IsValid)
             {
