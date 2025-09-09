@@ -4,6 +4,7 @@ using Eticaret.Service.Concrete;
 using Eticaret.WebUI.ExtensionMethods;
 using Eticaret.WebUI.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -86,6 +87,33 @@ namespace Eticaret.WebUI.Controllers
                 TotalPrice = cart.TotalPrice(),
                 Addresses = addresses
             };
+            return View(model);
+        }
+
+        [Authorize,HttpPost]
+        public async Task<IActionResult> Checkout(string CardNumber, string CardMonth, string CardYear, string CVV, string Addresses, string BillingAddress)
+        {
+            var cart = GetCart();
+            var appuser = await _serviceAppUser.GetAsync(x => x.UserGuid.ToString() == HttpContext.User.FindFirst("UserGuid").Value);
+            if (appuser == null)
+            {
+                return RedirectToAction("Index", "Account");
+            }
+            var addresses = await _serviceAddress.GetAllAsync(a => a.AppUserId == appuser.Id && a.IsActive);
+            var model = new CheckoutViewModel()
+            {
+                CartProducts = cart.CartLines,
+                TotalPrice = cart.TotalPrice(),
+                Addresses = addresses
+            };
+
+            if(string.IsNullOrWhiteSpace(CardNumber) || string.IsNullOrWhiteSpace(CardMonth) || string.IsNullOrWhiteSpace(CardYear) || string.IsNullOrWhiteSpace(CVV) || string.IsNullOrWhiteSpace(Addresses)|| string.IsNullOrWhiteSpace(BillingAddress))
+            {
+                return View(model);
+            }
+            var TeslimatAdresi = addresses.FirstOrDefault(a => a.AddressGuid.ToString() == Addresses);
+            var FaturaAdresi = addresses.FirstOrDefault(a => a.AddressGuid.ToString() == BillingAddress);
+
             return View(model);
         }
 
