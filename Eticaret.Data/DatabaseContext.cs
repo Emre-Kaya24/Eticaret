@@ -15,6 +15,8 @@ namespace Eticaret.Data
         public DbSet<News> News { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Slider> Sliders { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderLine> OrderLines { get; set; }
         
         // Veri Tabanı bağlantı ayarını yaptığımız yer => OnConfiguring
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
