@@ -71,7 +71,58 @@ namespace Eticaret.WebUI.Controllers
             {
                 return NotFound("Kullanıcı Datası bulunamadı! Oturumunuzu Kapatıp Lütfen Tekrar Giriş Yapınız.");
             }
-            var model = await _serviceAddress.GetAsync(u => u.AddressGuid.ToString() == id);
+            var model = await _serviceAddress.GetAsync(u => u.AddressGuid.ToString() == id && u.AppUserId ==appuser.Id);
+            
+            if (model == null)
+            {
+                return NotFound("Adres Bilgisi Bulunamadı!");
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, Address address)
+        {
+            var appuser = await _serviceAppUser.GetAsync(x => x.UserGuid.ToString() == HttpContext.User.FindFirst("UserGuid").Value);
+            if (appuser == null)
+            {
+                return NotFound("Kullanıcı Datası bulunamadı! Oturumunuzu Kapatıp Lütfen Tekrar Giriş Yapınız.");
+            }
+            var model = await _serviceAddress.GetAsync(u => u.AddressGuid.ToString() == id && u.AppUserId == appuser.Id);
+
+            if (model == null)
+            {
+                return NotFound("Adres Bilgisi Bulunamadı!");
+            }
+            model.Title = address.Title;
+            model.District = address.District;
+            model.City = address.City;
+            model.OpenAddress = address.OpenAddress;
+            model.IsDeliveryAddress = address.IsDeliveryAddress;
+            model.IsBillingAddress = address.IsBillingAddress;
+            model.IsActive = address.IsActive;
+
+            var otherAddresses = await _serviceAddress.GetAllAsync(e => e.AppUserId == appuser.Id && e.Id != model.Id);
+            foreach (var otherAddress in otherAddresses)
+            {
+                otherAddress.IsDeliveryAddress = false;
+                otherAddress.IsBillingAddress = false;
+                _serviceAddress.Update(otherAddress);
+            }
+
+            try
+            {
+                _serviceAddress.Update(model);
+                await _serviceAddress.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+
+                ModelState.AddModelError("", "Adres Güncellenirken Bir Hata Oluştu! Lütfen Tüm Alanları Kontrol Edip Tekrar Deneyiniz.");
+            }
+
             return View(model);
         }
     }
