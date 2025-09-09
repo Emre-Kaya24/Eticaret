@@ -57,7 +57,15 @@
                         if (cart != null && cart.CartLines.Count > 0)
                         {
 
-                            <a href="#" class="dropdown-toggle nav-link text-dark" role="button" data-bs-toggle="dropdown" aria-expanded="false">Sepetim</a>
+                            <a href="#" class="dropdown-toggle nav-link text-dark" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              Sepetim
+                                <span class="badge bg-danger text-white ms-1 rounded-pill">@cart.CartLines.Count</span>
+                            </a>
+                            
+                                
+                                
+
+                            
 
                             <ul class="dropdown-menu">
                                 @foreach (var item in cart.CartLines)
