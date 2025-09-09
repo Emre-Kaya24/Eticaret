@@ -63,5 +63,16 @@ namespace Eticaret.WebUI.Controllers
             ModelState.AddModelError("", "Kayıt Başarısız!");
             return View(address);
         }
+
+        public async Task<IActionResult> Edit(string id)
+        {
+            var appuser = await _serviceAppUser.GetAsync(x => x.UserGuid.ToString() == HttpContext.User.FindFirst("UserGuid").Value);
+            if (appuser == null)
+            {
+                return NotFound("Kullanıcı Datası bulunamadı! Oturumunuzu Kapatıp Lütfen Tekrar Giriş Yapınız.");
+            }
+            var model = await _serviceAddress.GetAsync(u => u.AddressGuid.ToString() == id);
+            return View(model);
+        }
     }
 }
