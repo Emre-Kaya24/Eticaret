@@ -23,7 +23,7 @@ namespace Eticaret.Core.Entities
         [Display(Name = "Kayıt Tarihi"), ScaffoldColumn(false)]
         public DateTime CreateDate { get; set; } = DateTime.Now;
         [ScaffoldColumn(false)]
-        public Guid? AddressGuid { get; set; }
+        public Guid? AddressGuid { get; set; } =  Guid.NewGuid();
         public int? AppUserId { get; set; }
         public AppUser? AppUser { get; set; }
     }
