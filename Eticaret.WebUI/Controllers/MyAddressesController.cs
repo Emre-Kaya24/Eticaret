@@ -120,9 +120,56 @@ namespace Eticaret.WebUI.Controllers
             catch (Exception)
             {
 
-                ModelState.AddModelError("", "Adres Güncellenirken Bir Hata Oluştu! Lütfen Tüm Alanları Kontrol Edip Tekrar Deneyiniz.");
+                ModelState.AddModelError("", "Hata Oluştu.");
             }
 
+            return View(model);
+        }
+
+
+
+        public async Task<IActionResult> Delete(string id)
+        {
+            var appuser = await _serviceAppUser.GetAsync(x => x.UserGuid.ToString() == HttpContext.User.FindFirst("UserGuid").Value);
+            if (appuser == null)
+            {
+                return NotFound("Kullanıcı Datası bulunamadı! Oturumunuzu Kapatıp Lütfen Tekrar Giriş Yapınız.");
+            }
+            var model = await _serviceAddress.GetAsync(u => u.AddressGuid.ToString() == id && u.AppUserId == appuser.Id);
+
+            if (model == null)
+            {
+                return NotFound("Adres Bilgisi Bulunamadı!");
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(string id, Address address)
+        {
+            var appuser = await _serviceAppUser.GetAsync(x => x.UserGuid.ToString() == HttpContext.User.FindFirst("UserGuid").Value);
+            if (appuser == null)
+            {
+                return NotFound("Kullanıcı Datası bulunamadı! Oturumunuzu Kapatıp Lütfen Tekrar Giriş Yapınız.");
+            }
+            var model = await _serviceAddress.GetAsync(u => u.AddressGuid.ToString() == id && u.AppUserId == appuser.Id);
+
+            if (model == null)
+            {
+                return NotFound("Adres Bilgisi Bulunamadı!");
+            }
+            try
+            {
+                _serviceAddress.Delete(model);
+                await _serviceAddress.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+
+                ModelState.AddModelError("", "Hata Oluştu.");
+            }
             return View(model);
         }
     }
