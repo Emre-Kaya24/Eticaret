@@ -114,6 +114,7 @@ namespace Eticaret.WebUI.Controllers
             var TeslimatAdresi = addresses.FirstOrDefault(a => a.AddressGuid.ToString() == Addresses);
             var FaturaAdresi = addresses.FirstOrDefault(a => a.AddressGuid.ToString() == BillingAddress);
 
+            //Ödeme Çekme
             return View(model);
         }
 
