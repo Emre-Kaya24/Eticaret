@@ -38,6 +38,12 @@ namespace Eticaret.Data
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Order>()
+            .HasMany(o => o.OrderLines)
+            .WithOne(ol => ol.Order)
+            .HasForeignKey(ol => ol.OrderId)
+            .OnDelete(DeleteBehavior.Cascade); // Order silindiğinde OrderLine’lar da silinsin
+
             modelBuilder.Entity<AppUser>()
             .Property(u => u.CreateDate)
             .HasDefaultValueSql("GETDATE()");

@@ -4,6 +4,7 @@ using Eticaret.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eticaret.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20250909220027_addOrderOrderLineRelation")]
+    partial class addOrderOrderLineRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -135,14 +138,14 @@ namespace Eticaret.Data.Migrations
                         new
                         {
                             Id = 1,
-                            CreateDate = new DateTime(2025, 9, 10, 1, 6, 29, 657, DateTimeKind.Local).AddTicks(6679),
+                            CreateDate = new DateTime(2025, 9, 10, 1, 0, 27, 37, DateTimeKind.Local).AddTicks(4034),
                             Email = "admin@eticaret.io",
                             IsActive = true,
                             IsAdmin = true,
                             Name = "Test",
                             Password = "123456*",
                             Surname = "User",
-                            UserGuid = new Guid("e0160fb4-fe78-421f-adf4-afe98a46443a"),
+                            UserGuid = new Guid("823dbfee-7147-41b0-b11f-34908b5bd2f0"),
                             UserName = "Admin"
                         });
                 });
@@ -228,7 +231,7 @@ namespace Eticaret.Data.Migrations
                         new
                         {
                             Id = 1,
-                            CreateDate = new DateTime(2025, 9, 10, 1, 6, 29, 660, DateTimeKind.Local).AddTicks(1542),
+                            CreateDate = new DateTime(2025, 9, 10, 1, 0, 27, 39, DateTimeKind.Local).AddTicks(7183),
                             IsActive = true,
                             IsTopMenu = true,
                             Name = "Elektronik",
@@ -238,7 +241,7 @@ namespace Eticaret.Data.Migrations
                         new
                         {
                             Id = 2,
-                            CreateDate = new DateTime(2025, 9, 10, 1, 6, 29, 660, DateTimeKind.Local).AddTicks(2493),
+                            CreateDate = new DateTime(2025, 9, 10, 1, 0, 27, 39, DateTimeKind.Local).AddTicks(8117),
                             IsActive = true,
                             IsTopMenu = true,
                             Name = "Bilgisayar",

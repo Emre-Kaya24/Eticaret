@@ -19,7 +19,7 @@ namespace Eticaret.Core.Entities
         public string DeliveryAddress { get; set; }
         [Display(Name = "Sipariş Tarihi")]
         public DateTime OrderDate { get; set; }
-        public List<OrderLine>? OrderLines { get; set; }
+        public List<OrderLine> OrderLines { get; set; }  = new List<OrderLine>();
 
 
 

@@ -92,15 +92,14 @@ namespace Eticaret.WebUI.Controllers
             return View(model);
         }
 
-        [Authorize,HttpPost]
+        [Authorize, HttpPost]
         public async Task<IActionResult> Checkout(string CardNumber, string CardMonth, string CardYear, string CVV, string DeliveryAddress, string BillingAddress)
         {
             var cart = GetCart();
             var appuser = await _serviceAppUser.GetAsync(x => x.UserGuid.ToString() == HttpContext.User.FindFirst("UserGuid").Value);
             if (appuser == null)
-            {
                 return RedirectToAction("Index", "Account");
-            }
+
             var addresses = await _serviceAddress.GetAllAsync(a => a.AppUserId == appuser.Id && a.IsActive);
             var model = new CheckoutViewModel()
             {
@@ -109,59 +108,60 @@ namespace Eticaret.WebUI.Controllers
                 Addresses = addresses
             };
 
-            if(string.IsNullOrWhiteSpace(CardNumber) || string.IsNullOrWhiteSpace(CardMonth) || string.IsNullOrWhiteSpace(CardYear) || string.IsNullOrWhiteSpace(CVV) || string.IsNullOrWhiteSpace(DeliveryAddress) || string.IsNullOrWhiteSpace(BillingAddress))
+            // Form doğrulaması
+            if (string.IsNullOrWhiteSpace(CardNumber) || string.IsNullOrWhiteSpace(CardMonth) || string.IsNullOrWhiteSpace(CardYear) || string.IsNullOrWhiteSpace(CVV) ||string.IsNullOrWhiteSpace(DeliveryAddress) || string.IsNullOrWhiteSpace(BillingAddress))
             {
+                TempData["Message"] = "Lütfen tüm alanları doldurun!";
                 return View(model);
             }
+
             var TeslimatAdresi = addresses.FirstOrDefault(a => a.AddressGuid.ToString() == DeliveryAddress);
             var FaturaAdresi = addresses.FirstOrDefault(a => a.AddressGuid.ToString() == BillingAddress);
 
-            //Ödeme Çekme
-
-            var siparis = new Order()
+            // Yeni sipariş oluştur
+            var siparis = new Order
             {
                 AppUserId = appuser.Id,
-                BillingAddress = BillingAddress,
                 CustomerId = appuser.UserGuid.ToString(),
-                DeliveryAddress = DeliveryAddress,
+                BillingAddress = FaturaAdresi != null ? $"{FaturaAdresi.OpenAddress} {FaturaAdresi.District}/{FaturaAdresi.City}" : BillingAddress,
+                DeliveryAddress = TeslimatAdresi != null ? $"{TeslimatAdresi.OpenAddress} {TeslimatAdresi.District}/{TeslimatAdresi.City}" : DeliveryAddress,
                 OrderDate = DateTime.Now,
                 TotalPrice = cart.TotalPrice(),
                 OrderNumber = Guid.NewGuid().ToString(),
-                OrderLines = []
-            };
-
-            foreach (var item in cart.CartLines)
-            {
-                siparis.OrderLines.Add(new OrderLine
+                OrderLines = cart.CartLines.Select(item => new OrderLine
                 {
-                    
                     ProductId = item.Product.Id,
-                    OrderId = siparis.Id,
                     Quantity = item.Quantity,
                     UnitPrice = item.Product.Price
-                });
-            }
+                }).ToList()
+            };
 
             try
             {
+                
                 await _serviceOrder.AddAsync(siparis);
                 var sonuc = await _serviceOrder.SaveChangesAsync();
+
                 if (sonuc > 0)
                 {
-                    
+                    // Sepeti temizle
                     HttpContext.Session.Remove("Cart");
                     return RedirectToAction("Thanks");
                 }
+                else
+                {
+                    TempData["Message"] = "Sipariş kaydedilemedi!";
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
                 TempData["Message"] = "Hata Oluştu";
-                ;
             }
 
             return View(model);
         }
+
+
 
         public IActionResult Thanks()
         {       
