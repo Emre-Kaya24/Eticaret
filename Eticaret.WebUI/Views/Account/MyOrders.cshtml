@@ -6,7 +6,7 @@
 
 <h1>Siparişlerim</h1>
 
-<table class="table">
+<table class="table table-bordered table-striped">
     <thead>
         <tr>
             <th>
@@ -36,6 +36,49 @@
                 </td>
                 <td>
                     @item.OrderLines.Count Ürün
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <table class="table table-sm">
+                        <tr>
+                            <th></th>
+                            <th>Ürün</th>
+                            <th>Fiyat</th>
+                            <th>Miktar</th>
+                            <th>Toplam</th>
+
+                        </tr>
+                        <tbody>
+
+                            @foreach (var item2 in item.OrderLines)
+                            {
+                                <tr>
+                                    <td>
+                                        <img src="/Img/Products/@item2.Product.Image" height="37" />
+                                    </td>
+                                    <td>
+                                        <a href="/Products/Details/@item2.Product.Id " class="nav-link text-dark">
+                                            @item2.Product.Name
+                                        </a>
+                                    </td>
+                                    <td>
+                                        @item2.UnitPrice.ToString("c")
+                                    </td>
+                                    <td>
+                                        @item2.Quantity
+                                    </td>
+                                    <td>
+                                        @((item2.Quantity * item2.UnitPrice).ToString("c"))
+                                    </td>
+
+                                </tr>
+                            }
+
+
+                        </tbody>
+
+                    </table>
                 </td>
             </tr>
         }
