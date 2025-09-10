@@ -4,6 +4,7 @@ using Eticaret.WebUI.Models;
 using Microsoft.AspNetCore.Authentication;// Login
 using Microsoft.AspNetCore.Authorization;// Login
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims; //Login
 
 namespace Eticaret.WebUI.Controllers
@@ -18,18 +19,20 @@ namespace Eticaret.WebUI.Controllers
         //}
 
         private readonly IService<AppUser> _service;
+        private readonly IService<Order> _serviceOrder;
 
-        public AccountController(IService<AppUser> service)
+        public AccountController(IService<AppUser> service, IService<Order> serviceOrder)
         {
             _service = service;
+            _serviceOrder = serviceOrder;
         }
 
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            AppUser user = await _service.GetAsync(x =>x.UserGuid.ToString() == HttpContext.User.FindFirst("UserGuid").Value);
+            AppUser user = await _service.GetAsync(x => x.UserGuid.ToString() == HttpContext.User.FindFirst("UserGuid").Value);
             if (user is null)
-            { 
+            {
                 return NotFound();
             }
             var model = new UserEditViewModel()
@@ -40,7 +43,7 @@ namespace Eticaret.WebUI.Controllers
                 Password = user.Password,
                 Phone = user.Phone,
                 Surname = user.Surname
-                    
+
             };
             return View(model);
         }
@@ -69,12 +72,12 @@ namespace Eticaret.WebUI.Controllers
                           <button type=""button"" class=""btn-close"" data-bs-dismiss=""alert"" aria-label=""Close""></button>
                         </div>";
 
-                           
+
 
                             return RedirectToAction("Index");
                         }
                     }
-                   
+
 
                 }
                 catch (Exception)
@@ -85,6 +88,18 @@ namespace Eticaret.WebUI.Controllers
             }
 
             return View();
+        }
+        [Authorize]
+        public async Task<IActionResult> MyOrders()
+        {
+            AppUser user = await _service.GetAsync(x => x.UserGuid.ToString() == HttpContext.User.FindFirst("UserGuid").Value);
+            if (user is null)
+            {
+                await HttpContext.SignOutAsync();
+                return RedirectToAction("SignIn");
+            }
+            var model = _serviceOrder.GetQueryable().Where(s => s.AppUserId == user.Id).Include(o=>o.OrderLines).ThenInclude(p=>p.Product);
+            return View(model);
         }
         public IActionResult SignIn()
         {
@@ -103,7 +118,7 @@ namespace Eticaret.WebUI.Controllers
                         ModelState.AddModelError("", "Hata Oluştu:");
                     }
                     else
-                    { 
+                    {
                         var claims = new List<Claim>()
                         {
                             new(ClaimTypes.Name, account.Name),
@@ -132,7 +147,7 @@ namespace Eticaret.WebUI.Controllers
             }
             return View();
         }
-        
+
         public IActionResult SignUp()
         {
             return View();

@@ -89,7 +89,7 @@
             </div>
         </div>
         <hr />
-        if (Model.Addresses == null )
+        if (Model.Addresses == null || !Model.Addresses.Any())
         {
             <div class="alert alert-secondary my-5">
                 <h5 class="text-danger">
@@ -107,7 +107,7 @@
         }
         else
         {
-            <form asp-action="Thanks">
+            <form asp-action="Checkout" method="post">
                 <div class="my-5">
                     <h3>Teslimat Adresi</h3>
                     <div class="row row-cols-3">
@@ -201,6 +201,7 @@
                     </button>
                 </div>
             </form>
+           
         }
     }
     else
