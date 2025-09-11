@@ -50,6 +50,12 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.OrderDate)
         </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OrderState)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OrderState)
+        </dd>
     </dl>
     @if (Model.OrderLines.Any())
     {
