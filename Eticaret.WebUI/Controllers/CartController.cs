@@ -128,6 +128,7 @@ namespace Eticaret.WebUI.Controllers
                 OrderDate = DateTime.Now,
                 TotalPrice = cart.TotalPrice(),
                 OrderNumber = Guid.NewGuid().ToString(),
+                OrderState = 0,
                 OrderLines = cart.CartLines.Select(item => new OrderLine
                 {
                     ProductId = item.Product.Id,
