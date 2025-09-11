@@ -2,6 +2,7 @@
 using Eticaret.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Eticaret.WebUI.Areas.Admin.Controllers
@@ -75,6 +76,7 @@ namespace Eticaret.WebUI.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            ViewBag.OrderStates = new SelectList(Enum.GetValues<EnumOrderState>());
             return View(order);
         }
 
