@@ -32,7 +32,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="OrderState" class="control-label"></label>
+<<<<<<< HEAD
                 <input asp-for="OrderState" class="form-control" />
+=======
+                <select asp-for="OrderState" class="form-select" asp-items="ViewBag.OrderStates">
+                    <option value="">Seçiniz</option>
+                </select>
+>>>>>>> feature/order-management
                 <span asp-validation-for="OrderState" class="text-danger"></span>
             </div>
             <div class="form-group">
