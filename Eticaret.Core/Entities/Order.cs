@@ -23,6 +23,7 @@ namespace Eticaret.Core.Entities
         [Display(Name = "Müşteri")]
         public AppUser? AppUser { get; set; }
 
+        [Display(Name = "Sipariş Durumu")]
         public EnumOrderState OrderState { get; set; }
 
     }
