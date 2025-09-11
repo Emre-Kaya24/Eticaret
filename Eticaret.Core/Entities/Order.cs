@@ -23,7 +23,23 @@ namespace Eticaret.Core.Entities
         [Display(Name = "Müşteri")]
         public AppUser? AppUser { get; set; }
 
-
+        public EnumOrderState OrderState { get; set; }
 
     }
+    public enum EnumOrderState
+    {
+        [Display(Name = "Onay Bekliyor")]
+        waiting,
+        [Display(Name = "Onaylandı")]
+        Approved, 
+        [Display(Name = "Kargoya Verildi.")]
+        Shipped, 
+        [Display(Name = "Tamamlandı.")]
+        completed, 
+        [Display(Name = "İptal Edildi.")]
+        canceled,
+        [Display(Name = "İade Edildi.")]
+        refunded
+    }
+
 }
