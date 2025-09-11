@@ -33,13 +33,13 @@ namespace Eticaret.Core.Entities
         waiting,
         [Display(Name = "Onaylandı")]
         Approved, 
-        [Display(Name = "Kargoya Verildi.")]
+        [Display(Name = "Kargoya Verildi")]
         Shipped, 
-        [Display(Name = "Tamamlandı.")]
+        [Display(Name = "Tamamlandı")]
         completed, 
-        [Display(Name = "İptal Edildi.")]
+        [Display(Name = "İptal Edildi")]
         canceled,
-        [Display(Name = "İade Edildi.")]
+        [Display(Name = "İade Edildi")]
         refunded
     }
 
