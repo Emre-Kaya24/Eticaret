@@ -69,7 +69,8 @@ namespace Eticaret.WebUI.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders.Include(u => u.AppUser).Include(o => o.OrderLines).ThenInclude(p => p.Product)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (order == null)
             {
                 return NotFound();
