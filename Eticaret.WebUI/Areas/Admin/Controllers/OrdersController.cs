@@ -20,7 +20,7 @@ namespace Eticaret.WebUI.Areas.Admin.Controllers
         // GET: Admin/Orders
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Orders.ToListAsync());
+            return View(await _context.Orders.Include(u=>u.AppUser).ToListAsync());
         }
 
         // GET: Admin/Orders/Details/5

@@ -20,6 +20,8 @@ namespace Eticaret.Core.Entities
         [Display(Name = "Sipariş Tarihi")]
         public DateTime OrderDate { get; set; }
         public List<OrderLine> OrderLines { get; set; }  = new List<OrderLine>();
+        [Display(Name = "Müşteri")]
+        public AppUser? AppUser { get; set; }
 
 
 
