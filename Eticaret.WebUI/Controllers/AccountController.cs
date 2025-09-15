@@ -1,6 +1,7 @@
 ﻿using Eticaret.Core.Entities;
 using Eticaret.Service.Abstract;
 using Eticaret.WebUI.Models;
+using Eticaret.WebUI.Utills;
 using Microsoft.AspNetCore.Authentication;// Login
 using Microsoft.AspNetCore.Authorization;// Login
 using Microsoft.AspNetCore.Mvc;
@@ -200,8 +201,20 @@ namespace Eticaret.WebUI.Controllers
         }
 
         [HttpPost]
-        public IActionResult PasswordRenew(string Email)
+        public async Task<IActionResult> PasswordRenewAsync(string Email)
         {
+            if (string.IsNullOrWhiteSpace(Email))
+            {
+                ModelState.AddModelError("", "Email boş geçilemez");
+                return View();
+            }
+            AppUser user = await _service.GetAsync(x => x.Email == Email);
+            if (user is null)
+            {
+                ModelState.AddModelError("", "Girdiğiniz Email Bulunamadı!");
+                return View();
+            }
+            //await MailHelper.SendMailAsync(contact);
             return View();
         }
 
