@@ -235,13 +235,47 @@ namespace Eticaret.WebUI.Controllers
                 return View();
         }
 
-        public IActionResult PasswordChange(string user)
+        public async Task<IActionResult> PasswordChangeAsync(string user)
         {
             if (user is null)
             {
                 return BadRequest("Geçersiz İstek!");
             }
+            AppUser appuser = await _service.GetAsync(x => x.UserGuid.ToString() == user);
+            if (appuser is null)
+            {
+                return NotFound("Geçersiz Değer!");
+            }
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PasswordChange(string user,string Password)
+        {
+            if (user is null)
+            {
+                return BadRequest("Geçersiz İstek!");
+            }
+            AppUser appuser = await _service.GetAsync(x => x.UserGuid.ToString() == user);
+            if (appuser is null)
+            {
+                ModelState.AddModelError("", "Geçersiz Değer!");
+                return View();
+            }
+            appuser.Password = Password;
+            var sonuc = await _service.SaveChangesAsync();
+            if (sonuc > 0)
+            {
+                TempData["Message"] = @"<div class=""alert alert-success alert-dismissible fade show"" role=""alert"">
+                          <strong>Şifreniz Başarıyla Güncellenmiştir! Giriş Ekranından Oturum Açabilirsiniz.</strong>
+                          <button type=""button"" class=""btn-close"" data-bs-dismiss=""alert"" aria-label=""Close""></button>
+                        </div>";
+            }
+            else
+            {
+                ModelState.AddModelError("", "Güncelleme Başarısız!");
+            }
+                return View();
         }
 
     }
