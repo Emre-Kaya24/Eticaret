@@ -214,7 +214,8 @@ namespace Eticaret.WebUI.Controllers
                 ModelState.AddModelError("", "Girdiğiniz Email Bulunamadı!");
                 return View();
             }
-            //await MailHelper.SendMailAsync(contact);
+            string mesaj = $"Şifrenizi Yenilemek İçin Lütfen : <a href='https://localhost:44372/Account/PasswordRenew?user={user.UserGuid.ToString()}'>Buraya Tıklayınız</a>";
+            await MailHelper.SendMailAsync(Email, "Şifremi Yenile", "");
             return View();
         }
 
