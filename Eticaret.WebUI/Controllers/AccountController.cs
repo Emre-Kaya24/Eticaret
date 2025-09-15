@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;// Login
 using Microsoft.AspNetCore.Authorization;// Login
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using System.Security.Claims; //Login
 
 namespace Eticaret.WebUI.Controllers
@@ -191,6 +192,20 @@ namespace Eticaret.WebUI.Controllers
             await HttpContext.SignOutAsync();
             return RedirectToAction("SignIn");
         }
+
+       
+        public IActionResult PasswordRenew()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult PasswordRenew(string Email)
+        {
+            return View();
+        }
+
+
 
     }
 }
