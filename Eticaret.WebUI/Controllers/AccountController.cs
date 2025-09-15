@@ -200,6 +200,8 @@ namespace Eticaret.WebUI.Controllers
             return View();
         }
 
+       
+
         [HttpPost]
         public async Task<IActionResult> PasswordRenewAsync(string Email)
         {
@@ -214,12 +216,33 @@ namespace Eticaret.WebUI.Controllers
                 ModelState.AddModelError("", "Girdiğiniz Email Bulunamadı!");
                 return View();
             }
-            string mesaj = $"Şifrenizi Yenilemek İçin Lütfen : <a href='https://localhost:44372/Account/PasswordRenew?user={user.UserGuid.ToString()}'>Buraya Tıklayınız</a>";
-            await MailHelper.SendMailAsync(Email, "Şifremi Yenile", "");
-            return View();
+            string mesaj = $"Sayın {user.Name} {user.Surname} <br> Şifrenizi Yenilemek İçin Lütfen : <a href='https://localhost:44372/Account/PasswordChange?user={user.UserGuid.ToString()}'>Buraya Tıklayınız</a>";
+            var sonuc = await MailHelper.SendMailAsync(Email, "Şifremi Yenile", mesaj);
+            if (sonuc)
+            {
+                TempData["Message"] = @"<div class=""alert alert-success alert-dismissible fade show"" role=""alert"">
+                          <strong>Şifre Sıfırlama Bağlantınız Mail Adresinize Gönderilmiştir.</strong>
+                          <button type=""button"" class=""btn-close"" data-bs-dismiss=""alert"" aria-label=""Close""></button>
+                        </div>";
+            }
+            else
+            {
+                TempData["Message"] = @"<div class=""alert alert-danger alert-dismissible fade show"" role=""alert"">
+                          <strong>Şifre Sıfırlama Bağlantınız Mail Adresinize Gönderilemedi!</strong>
+                          <button type=""button"" class=""btn-close"" data-bs-dismiss=""alert"" aria-label=""Close""></button>
+                        </div>";
+            }
+                return View();
         }
 
-
+        public IActionResult PasswordChange(string user)
+        {
+            if (user is null)
+            {
+                return BadRequest("Geçersiz İstek!");
+            }
+            return View();
+        }
 
     }
 }
