@@ -203,14 +203,6 @@ namespace Eticaret.WebUI.Controllers
 
             List<BasketItem> basketItems = new List<BasketItem>();
 
-            //BasketItem firstBasketItem = new BasketItem();
-            //firstBasketItem.Id = "BI101";
-            //firstBasketItem.Name = "Binocular";
-            //firstBasketItem.Category1 = "Collectibles";
-            //firstBasketItem.Category2 = "Accessories";
-            //firstBasketItem.ItemType = BasketItemType.PHYSICAL.ToString();
-            //firstBasketItem.Price = "0.3";
-            //basketItems.Add(firstBasketItem);
 
             foreach (var item in cart.CartLines)
             {
@@ -224,7 +216,22 @@ namespace Eticaret.WebUI.Controllers
                 });
             }
 
-                request.BasketItems = basketItems;
+            if (siparis.TotalPrice < 999)
+            {
+                basketItems.Add(new BasketItem
+                {
+                    Id = "Kargo",
+                    Name = "Kargo Ücreti",
+                    Category1 = "Kargo Ücreti",
+                    ItemType = BasketItemType.VIRTUAL.ToString(),
+                    Price = "99"
+                });
+                siparis.TotalPrice += 99;
+                request.Price = siparis.TotalPrice.ToString().Replace(",", ".");
+                request.PaidPrice = siparis.TotalPrice.ToString().Replace(",", ".");
+            }
+
+            request.BasketItems = basketItems;
 
             Payment payment = await Payment.Create(request, options);
             
