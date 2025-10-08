@@ -220,7 +220,7 @@ namespace Eticaret.WebUI.Controllers
                     Name = item.Product.Name,
                     Category1 = "Collectibles",
                     ItemType = BasketItemType.PHYSICAL.ToString(),
-                    Price = item.Product.Price.ToString().Replace(",",".")
+                    Price = (item.Product.Price * item.Quantity).ToString().Replace(",",".")
                 });
             }
 
@@ -249,7 +249,7 @@ namespace Eticaret.WebUI.Controllers
                 
                 else
                 {
-                    TempData["Message"] = "<div class='alert alert-danger'>Ödeme İşlemi Başarısız!</div>";
+                    TempData["Message"] = $"<div class='alert alert-danger'>Ödeme İşlemi Başarısız!</div> ({payment.ErrorMessage})";
                 }
             }
             catch (Exception ex)
