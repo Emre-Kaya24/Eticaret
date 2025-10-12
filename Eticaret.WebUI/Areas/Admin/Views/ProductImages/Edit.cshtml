@@ -1,22 +1,28 @@
 ﻿@model Eticaret.Core.Entities.ProductImage
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Ürün Resmi Düzenle";
 }
 
-<h1>Edit</h1>
-
-<h4>ProductImage</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Name" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" type="file"/>
                 <span asp-validation-for="Name" class="text-danger"></span>
+                @if (Model.Name != null && !string.IsNullOrWhiteSpace(Model.Name))
+                {
+                    <img src="/Img/Products/@Model.Name" height="75" />
+
+                    <label class="form-check-label">
+                        @Html.CheckBox("cbResmiSil") Resmi Sil
+                    </label>
+                }
             </div>
             <div class="form-group">
                 <label asp-for="Alt" class="control-label"></label>
@@ -25,17 +31,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="ProductId" class="control-label"></label>
-                <select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId"></select>
+                <select asp-for="ProductId" class="form-select" asp-items="ViewBag.ProductId"></select>
                 <span asp-validation-for="ProductId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="form-group mt-2">
+                <input type="submit" value="Kaydet" class="btn btn-primary" />
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 

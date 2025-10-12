@@ -11,6 +11,7 @@ namespace Eticaret.Core.Entities
         public string? Alt { get; set; }
         [Display(Name = "Ürün")]
         public int? ProductId { get; set; }
+        [Display(Name = "Ürün")]
         public Product? Product { get; set; }
 
     }

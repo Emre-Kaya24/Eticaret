@@ -5,10 +5,6 @@ using Iyzipay.Model.V2.Subscription;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Eticaret.WebUI.Areas.Admin.Controllers
@@ -90,11 +86,10 @@ namespace Eticaret.WebUI.Areas.Admin.Controllers
         }
 
         // POST: Admin/ProductImages/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Alt,ProductId")] ProductImage productImage)
+        public async Task<IActionResult> Edit(int id, ProductImage productImage, IFormFile? Name, bool cbResmiSil = false)
         {
             if (id != productImage.Id)
             {
@@ -105,6 +100,10 @@ namespace Eticaret.WebUI.Areas.Admin.Controllers
             {
                 try
                 {
+                    if (cbResmiSil)
+                        productImage.Name = string.Empty;
+                    if (Name is not null)
+                        productImage.Name = await FileHelper.FileLoaderAsync(Name, "/Img/Products/");
                     _context.Update(productImage);
                     await _context.SaveChangesAsync();
                 }
