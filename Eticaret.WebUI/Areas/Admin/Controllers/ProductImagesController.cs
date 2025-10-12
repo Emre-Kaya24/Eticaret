@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Eticaret.Core.Entities;
+using Eticaret.Data;
+using Eticaret.WebUI.Utills;
+using Iyzipay.Model.V2.Subscription;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Eticaret.Core.Entities;
-using Eticaret.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Eticaret.WebUI.Areas.Admin.Controllers
 {
@@ -47,21 +50,20 @@ namespace Eticaret.WebUI.Areas.Admin.Controllers
         }
 
         // GET: Admin/ProductImages/Create
-        public IActionResult Create()
+        public IActionResult Create(string productId)
         {
-            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name");
+            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", productId);
             return View();
         }
 
         // POST: Admin/ProductImages/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Alt,ProductId")] ProductImage productImage)
+        public async Task<IActionResult> Create(ProductImage productImage, IFormFile? Name)
         {
             if (ModelState.IsValid)
             {
+                productImage.Name = await FileHelper.FileLoaderAsync(Name, "/Img/Products/");
                 _context.Add(productImage);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
