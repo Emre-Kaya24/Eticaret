@@ -7,7 +7,7 @@ namespace Eticaret.Core.Entities
         public int Id { get; set; }
         [Display(Name = "Resim Adı"),StringLength(240)]
         public string? Name { get; set; }
-        [Display(Name = "Resim Açıklama"), StringLength(300)]
+        [Display(Name = "Resim Açıklama (Alt Tagı)"), StringLength(300)]
         public string? Alt { get; set; }
         [Display(Name = "Ürün")]
         public int? ProductId { get; set; }
