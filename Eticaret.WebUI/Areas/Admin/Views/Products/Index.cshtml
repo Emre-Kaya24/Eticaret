@@ -6,7 +6,7 @@
 <style>
     td.fixed-height{max-width:180px; height:22px; overflow: hidden; text-overflow:ellipsis; white-space:nowrap;}
 
-    #datatablesSimple tbody tr td:last-child{
+    #datatablesSimple tbody tr td:last-child, td:nth-child(2) {
         white-space: nowrap;
     }
 </style>
@@ -22,9 +22,6 @@
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreateDate)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Image)
@@ -62,14 +59,18 @@
                 <td class="fixed-height">
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
+           
             <td>
-                    @item.CreateDate.ToShortDateString()
-            </td>
-            <td>
-                    <a href="/Img/Products/@item.Image"> <img src="/Img/Products/@item.Image" alt="" height="30" /></a>
+                    <a href="/Img/Products/@item.Image" class="btn btn-sm btn-default ms-2">
+                        <img src="/Img/Products/@item.Image" alt="" height="30" />
+                    </a>
 
-                    <a href="/admin/ProductImages/Create?productId=@item.Id" title="Yeni Resim Ekle" target="_blank" class="ms-2">
+                    <a href="/admin/ProductImages/Create?productId=@item.Id" title="Yeni Resim Ekle" target="_blank" class="btn btn-sm btn-default">
                         <i class="fa-solid fa-plus"></i> 
+                    </a>
+
+                    <a href="/admin/ProductImages?productId=@item.Id" title="Ürün Resimleri Ekle" target="_blank" class="btn btn-sm btn-default ms-2">
+                        <i class="fa-solid fa-images"></i> 
                     </a>
             </td>
             <td>
