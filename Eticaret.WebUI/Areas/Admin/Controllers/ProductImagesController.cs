@@ -2,6 +2,7 @@
 using Eticaret.Data;
 using Eticaret.WebUI.Utills;
 using Iyzipay.Model.V2.Subscription;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using static System.Net.Mime.MediaTypeNames;
 namespace Eticaret.WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Policy = "AdminPolicy")]
     public class ProductImagesController : Controller
     {
         private readonly DatabaseContext _context;
@@ -20,9 +22,13 @@ namespace Eticaret.WebUI.Areas.Admin.Controllers
         }
 
         // GET: Admin/ProductImages
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? productId)
         {
             var databaseContext = _context.ProductImages.Include(p => p.Product);
+            if (productId.HasValue)
+            {
+                return View(await databaseContext.Where(x=> x.ProductId == productId).ToListAsync());
+            }
             return View(await databaseContext.ToListAsync());
         }
 
