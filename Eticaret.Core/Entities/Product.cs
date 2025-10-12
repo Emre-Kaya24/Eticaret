@@ -24,10 +24,8 @@ namespace Eticaret.Core.Entities
         public int Stock{ get; set; }
         [Display(Name = "Aktif?")]
         public bool IsActive { get; set; }
-
         [Display(Name = "Ana Sayfa")]
         public bool IsHome { get; set; }
-
         [Display(Name = "Kategori")]
         public int? CategoryId { get; set; }
         [Display(Name = "Kategori")]
@@ -42,5 +40,6 @@ namespace Eticaret.Core.Entities
         public int OrderNo { get; set; }
         [Display(Name = "Kayıt Tarihi"), ScaffoldColumn(false)]
         public DateTime CreateDate { get; set; } = DateTime.Now;
+        public IList<ProductImage>? ProductImages { get; set; }
     }
 }
