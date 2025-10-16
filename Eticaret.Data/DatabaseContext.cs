@@ -7,6 +7,14 @@ namespace Eticaret.Data
 {
     public class DatabaseContext : DbContext
     {
+        public DatabaseContext(DbContextOptions options) : base(options)
+        {
+        }
+
+        protected DatabaseContext()
+        {
+        }
+
         public DbSet<Address> Addresses { get; set; }
         public DbSet<AppUser> AppUser { get; set; }
         public DbSet<Brand> Brands { get; set; }
@@ -22,7 +30,12 @@ namespace Eticaret.Data
         // Veri Tabanı bağlantı ayarını yaptığımız yer => OnConfiguring
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=DESKTOP-LGO92CF; Database=EticaretDb; Trusted_Connection=True; TrustServerCertificate=True;");
+            //local
+            //optionsBuilder.UseSqlServer(@"Server=DESKTOP-LGO92CF; Database=EticaretDb; Trusted_Connection=True; TrustServerCertificate=True;");
+            
+            //Server
+            //optionsBuilder.UseSqlServer(@"workstation id=PumPcTicaret.mssql.somee.com;packet size=4096;user id=emrekaya_SQLLogin_2;pwd=bey3hih9lf;data source=PumPcTicaret.mssql.somee.com;persist security info=False;initial catalog=PumPcTicaret;TrustServerCertificate=True");
+
 
             optionsBuilder.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
             base.OnConfiguring(optionsBuilder);

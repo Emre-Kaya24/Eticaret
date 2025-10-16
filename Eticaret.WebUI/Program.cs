@@ -2,6 +2,7 @@ using Eticaret.Data;
 using Eticaret.Service.Abstract;
 using Eticaret.Service.Concrete;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +12,10 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddSession();
 
-builder.Services.AddDbContext<DatabaseContext>();
+builder.Services.AddDbContext<DatabaseContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection"));
+});
 
 builder.Services.AddScoped(typeof(IService<>), typeof(Service<>));
 
